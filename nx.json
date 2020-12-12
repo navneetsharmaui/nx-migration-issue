@@ -22,5 +22,16 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "client-migration-app": {
+      "tags": ["scope: migration", "type: app"]
+    },
+    "client-migration-app-e2e": {
+      "tags": [],
+      "implicitDependencies": ["client-migration-app"]
+    },
+    "core": {
+      "tags": ["scope: core", "type: utils"]
+    }
+  }
 }
