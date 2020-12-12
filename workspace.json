@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "projects": {
+    "client-migration-app": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/client/migration-app",
+      "sourceRoot": "apps/client/migration-app/src",
+      "prefix": "nx-migration-issue",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/client/migration-app",
+            "index": "apps/client/migration-app/src/index.html",
+            "main": "apps/client/migration-app/src/main.ts",
+            "polyfills": "apps/client/migration-app/src/polyfills.ts",
+            "tsConfig": "apps/client/migration-app/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/client/migration-app/src/favicon.ico",
+              "apps/client/migration-app/src/assets"
+            ],
+            "styles": ["apps/client/migration-app/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/client/migration-app/src/environments/environment.ts",
+                  "with": "apps/client/migration-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "client-migration-app:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "client-migration-app:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "client-migration-app:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/client/migration-app/src/**/*.ts",
+              "apps/client/migration-app/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/client/migration-app/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/apps/client/migration-app"]
+        }
+      }
+    },
+    "client-migration-app-e2e": {
+      "root": "apps/client/migration-app-e2e",
+      "sourceRoot": "apps/client/migration-app-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/client/migration-app-e2e/cypress.json",
+            "tsConfig": "apps/client/migration-app-e2e/tsconfig.e2e.json",
+            "devServerTarget": "client-migration-app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "client-migration-app:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/client/migration-app-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "core": {
+      "projectType": "library",
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
+      "prefix": "nx-migration-issue",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/core/src/**/*.ts",
+              "libs/core/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/core/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/core"]
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular",
+    "packageManager": "yarn"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress",
+      "strict": true
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "client-migration-app"
+}
